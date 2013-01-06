@@ -7,6 +7,7 @@ import java.util.Calendar;
 import android.os.Bundle;
 import android.os.Environment;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -77,7 +78,6 @@ public class CameraActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_camera);
-
 		createFoto = (Button) findViewById(R.id.button1);
 		filtr1 = (Button) findViewById(R.id.button2);
 		filtr2 = (Button) findViewById(R.id.button3);
@@ -87,16 +87,16 @@ public class CameraActivity extends Activity {
 	
 		image = (ImageView) findViewById(R.id.imageView1);
 		
+		saveImage.setBackgroundResource(R.drawable.savebutton);
+		createFoto.setBackgroundResource(R.drawable.button);
+		filtr1.setBackgroundResource(R.drawable.background);
+		filtr2.setBackgroundResource(R.drawable.background);
+		filtr3.setBackgroundResource(R.drawable.background);
+		filtr4.setBackgroundResource(R.drawable.background);
+		
 		createFoto.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				createFoto.setText("Zrób następne zdjęcie");
-				filtr1.setVisibility(1);
-				filtr2.setVisibility(1);
-				filtr3.setVisibility(1);
-				filtr4.setVisibility(1);
-				saveImage.setVisibility(1);
-				image.setVisibility(1);
 				Intent cameraIntent = new Intent(
 						android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
 				startActivityForResult(cameraIntent, CAMERA_PIC_REQUEST);
@@ -113,6 +113,7 @@ public class CameraActivity extends Activity {
 					    -1, -1, -1
 					};
 				thumbnail = addFilter(orginal, filter, 1.0 , 0.0);
+				thumbnail = Bitmap.createBitmap(thumbnail, 2, 2, thumbnail.getWidth() - 4, thumbnail.getHeight() - 4);
 				image.setImageBitmap(thumbnail);
 			}
 		});
@@ -128,6 +129,7 @@ public class CameraActivity extends Activity {
 					     0,  1,  1
 				};
 				thumbnail = addFilter(orginal, filter, 1.0 , 128.0);
+				thumbnail = Bitmap.createBitmap(thumbnail, 2, 2, thumbnail.getWidth() - 4, thumbnail.getHeight() - 4);
 				image.setImageBitmap(thumbnail);
 			}
 		});
@@ -143,6 +145,7 @@ public class CameraActivity extends Activity {
 						    1, 1, 1
 				};
 				thumbnail = addFilter(orginal, filter, (1.0 / 9.0) , 0.0);
+				thumbnail = Bitmap.createBitmap(thumbnail, 2, 2, thumbnail.getWidth() - 4, thumbnail.getHeight() - 4);
 				image.setImageBitmap(thumbnail);
 			}
 		});
@@ -160,6 +163,7 @@ public class CameraActivity extends Activity {
 					     0,  0, -1,  0,  0,
 				};
 				thumbnail = addFilter(orginal, filter, 1 , 128.0);
+				thumbnail = Bitmap.createBitmap(thumbnail, 2, 2, thumbnail.getWidth() - 4, thumbnail.getHeight() - 4);
 				image.setImageBitmap(thumbnail);
 			}
 		});
@@ -181,6 +185,9 @@ public class CameraActivity extends Activity {
 					   File file = new File(dir, name);
 				       FileOutputStream out = new FileOutputStream(file);
 				       thumbnail.compress(Bitmap.CompressFormat.PNG, 90, out);
+				       Context context = getApplicationContext();
+				       Toast toast = Toast.makeText(context, "Zapisano plik", 200);
+				       toast.show();
 				} catch (Exception e) {
 				       e.printStackTrace();
 				}
@@ -191,9 +198,20 @@ public class CameraActivity extends Activity {
 
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if (requestCode == CAMERA_PIC_REQUEST) {
+			try {
+			filtr1.setVisibility(1);
+			filtr2.setVisibility(1);
+			filtr3.setVisibility(1);
+			filtr4.setVisibility(1);
+			saveImage.setVisibility(1);
+			image.setVisibility(1);
 			thumbnail = (Bitmap) data.getExtras().get("data");
 			orginal = (Bitmap) data.getExtras().get("data");
+			thumbnail = Bitmap.createBitmap(thumbnail, 2, 2, thumbnail.getWidth() - 4, thumbnail.getHeight() - 4);
 			image.setImageBitmap(thumbnail);
+			} catch (Exception e) {
+			       e.printStackTrace();
+			}
 		}
 	}
 

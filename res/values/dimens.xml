@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="Duzo">120dp</dimen>
+    <dimen name="BardzoDuzo">258dp</dimen>
+    <dimen name="Malo">51dp</dimen>
+    <dimen name="SrednioDuzo">321dp</dimen>
+    <dimen name="SrednioMaloDuzo">82dp</dimen>
+</resources>
